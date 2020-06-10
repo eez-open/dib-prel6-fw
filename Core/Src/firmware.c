@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #define FIRMWARE_VERSION_MAJOR 0x00
-#define FIRMWARE_VERSION_MINOR 0x02
+#define FIRMWARE_VERSION_MINOR 0x03
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -84,18 +84,8 @@ static const int NUM_LOOP_OPERATIONS = sizeof(loopOperations) / sizeof(LoopOpera
 
 ////////////////////////////////////////////////////////////////////////////////
 
-uint32_t cnt1 = 0;
-uint32_t cnt2 = 0;
-uint32_t cnt3 = 0;
-
 void beginTransfer() {
-	cnt1++;
-
-	*((uint32_t *)(output + 0)) = cnt1;
-	*((uint32_t *)(output + 4)) = cnt2;
-	*((uint32_t *)(output + 8)) = cnt3;
-
-	for (int i = 12; i < BUFFER_SIZE; i++) {
+	for (int i = 0; i < BUFFER_SIZE; i++) {
     	output[i] = i;
     }
 
@@ -105,12 +95,10 @@ void beginTransfer() {
 }
 
 void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi) {
-	cnt2++;
 	transferCompleted = 1;
 }
 
 void HAL_SPI_ErrorCallback(SPI_HandleTypeDef *hspi) {
-    cnt3++;
 	transferCompleted = 1;
 }
 
@@ -125,7 +113,7 @@ void loop() {
     if (transferCompleted) {
         transferCompleted = 0;
 
-        // TODO: read and interpret input
+        HAL_Delay(1);
 
         beginTransfer();
     }
