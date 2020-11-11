@@ -40,19 +40,19 @@ void slaveSynchro(void) {
 
     uint8_t rxBuffer[15];
 
-    while (1) {
-		rxBuffer[0] = 0;
-
-		transferCompleted = 0;
-        if (HAL_SPI_TransmitReceive_DMA(&hspi1, (uint8_t *)&txBuffer, (uint8_t *)&rxBuffer, sizeof(rxBuffer)) != HAL_OK) {
-        	continue;
-        }
-		while (!transferCompleted);
-
-		if (rxBuffer[0] == SPI_MASTER_SYNBYTE) {
-			break;
+	while (1) {
+		HAL_SPI_TransmitReceive_DMA(&hspi1, (uint8_t *)&txBuffer, (uint8_t *)&rxBuffer, sizeof(rxBuffer));
+		HAL_GPIO_WritePin(DIB_IRQ_GPIO_Port, DIB_IRQ_Pin, GPIO_PIN_RESET);
+		while (!transferCompleted) {
 		}
-	};
+
+    	if (transferCompleted == 1) {
+    		break;
+    	}
+
+    	HAL_GPIO_WritePin(DIB_IRQ_GPIO_Port, DIB_IRQ_Pin, GPIO_PIN_RESET);
+    	HAL_Delay(1);
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -62,41 +62,33 @@ void beginTransfer() {
     	output[i] = i;
     }
 
+    transferCompleted = 0;
     HAL_SPI_TransmitReceive_DMA(&hspi1, output, input, BUFFER_SIZE);
+    HAL_GPIO_WritePin(DIB_IRQ_GPIO_Port, DIB_IRQ_Pin, GPIO_PIN_RESET);
 }
 
 void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi) {
+	HAL_GPIO_WritePin(DIB_IRQ_GPIO_Port, DIB_IRQ_Pin, GPIO_PIN_SET);
 	transferCompleted = 1;
 }
 
 void HAL_SPI_ErrorCallback(SPI_HandleTypeDef *hspi) {
-	transferCompleted = 1;
+	HAL_GPIO_WritePin(DIB_IRQ_GPIO_Port, DIB_IRQ_Pin, GPIO_PIN_SET);
+	transferCompleted = 2;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
 void setup() {
-	//
-
-	//
-
     slaveSynchro();
+    beginTransfer();
 }
 
 void loop() {
-    beginTransfer();
-    HAL_GPIO_WritePin(DIB_IRQ_GPIO_Port, DIB_IRQ_Pin, GPIO_PIN_SET);
-
-    //
-
-    //
-
-    while (!transferCompleted) {
+    if (transferCompleted) {
+    	if (transferCompleted == 1) {
+    		// TODO ...
+    	}
+        beginTransfer();
     }
-    transferCompleted = 0;
-	HAL_GPIO_WritePin(DIB_IRQ_GPIO_Port, DIB_IRQ_Pin, GPIO_PIN_RESET);
-
-	//
-
-	//
 }
