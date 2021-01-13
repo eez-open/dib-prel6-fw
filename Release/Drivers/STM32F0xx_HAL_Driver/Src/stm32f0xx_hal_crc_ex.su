@@ -1,0 +1,2 @@
+stm32f0xx_hal_crc_ex.c:161:19:HAL_CRCEx_Input_Data_Reverse	8	static
+stm32f0xx_hal_crc_ex.c:187:19:HAL_CRCEx_Output_Data_Reverse	8	static

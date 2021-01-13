@@ -1,0 +1,11 @@
+firmware.cpp:28:6:void Relays_Setup()	8	static
+firmware.cpp:36:6:void Relays_Update(SetParams&)	24	static
+firmware.cpp:64:6:void beginTransfer()	8	static
+firmware.cpp:70:6:void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef*)	0	static
+firmware.cpp:77:6:void HAL_SPI_ErrorCallback(SPI_HandleTypeDef*)	0	static
+firmware.cpp:84:5:int waitTransferCompletion()	16	static
+firmware.cpp:100:6:void Command_GetInfo(Request&, Response&)	8	static
+firmware.cpp:108:6:void Command_GetState(Request&, Response&)	8	static
+firmware.cpp:112:6:void Command_SetParams(Request&, Response&)	16	static
+firmware.cpp:122:17:void setup()	8	static
+firmware.cpp:126:17:void loop()	8	static
