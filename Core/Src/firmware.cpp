@@ -116,5 +116,5 @@ extern "C" void loop() {
 
 		// tell the master that no command was handled
 		response.command = COMMAND_NONE;
-}
+    }
 }
