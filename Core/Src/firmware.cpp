@@ -7,7 +7,7 @@
 #include "firmware.h"
 #include "utils.h"
 
-static const uint32_t CONF_SPI_TRANSFER_TIMEOUT_MS = 500;
+static const uint32_t CONF_SPI_TRANSFER_TIMEOUT_MS = 2000;
 static const uint32_t CONF_RELAY_DEBOUNCE_TIME_MS = 10;
 
 // master-slave communication
@@ -60,9 +60,11 @@ extern "C" void loop() {
 	while (transferState == TRANSFER_STATE_WAIT) {
 		if (HAL_GetTick() - startTick > CONF_SPI_TRANSFER_TIMEOUT_MS) {
 			// transfer is taking too long to finish, maybe something is stuck, abort it
+			__disable_irq();
 			HAL_SPI_Abort(hspiMaster);
 			SET_PIN(DIB_IRQ_GPIO_Port, DIB_IRQ_Pin);
 			transferState = TRANSFER_STATE_ERROR;
+			__enable_irq();
 			break;
 		}
 	}
