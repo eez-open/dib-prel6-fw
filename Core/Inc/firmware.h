@@ -24,6 +24,7 @@ struct Response {
 
     union {
         struct {
+        	uint16_t moduleType;
             uint8_t firmwareMajorVersion;
             uint8_t firmwareMinorVersion;
             uint32_t idw0;

@@ -79,6 +79,8 @@ extern "C" void loop() {
 
 		if (request.command == COMMAND_GET_INFO) {
 			// return back to the master firmware version and MCU id
+			static const uint16_t MODULE_TYPE_DIB_PREL6 = 6;
+			response.getInfo.moduleType = MODULE_TYPE_DIB_PREL6;
 			response.getInfo.firmwareMajorVersion = FIRMWARE_VERSION_MAJOR;
 			response.getInfo.firmwareMinorVersion = FIRMWARE_VERSION_MINOR;
 			response.getInfo.idw0 = HAL_GetUIDw0();
