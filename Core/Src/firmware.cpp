@@ -7,8 +7,7 @@
 #include "firmware.h"
 #include "utils.h"
 
-//static const uint32_t CONF_SPI_TRANSFER_TIMEOUT_MS = 2000;
-static const uint32_t CONF_RELAY_DEBOUNCE_TIME_MS = 10;
+static const uint32_t CONF_RELAY_DEBOUNCE_TIME_MS = 20;
 
 // master-slave communication
 extern "C" void SPI1_Init(void);
